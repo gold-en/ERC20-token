@@ -3,9 +3,9 @@ pragma solidity ^0.8.18;
 
 contract ERC20{
     //State variables
-    uint256 public totalsupply;
     string public name = "OKEAMA";
     string public symbol = "BUNN";
+    uint256 public totalsupply;
     uint8 public decimal = 18;
     address public owner;
 
@@ -20,7 +20,8 @@ contract ERC20{
  
     constructor(){
         owner = msg.sender;
-        _mint(msg.sender, 1000e18);
+        totalsupply = 1000e18;
+        balanceOf[msg.sender] = totalsupply;
     }
 
     function approve(address spender, uint256 amount) external returns(bool){
@@ -73,13 +74,13 @@ contract ERC20{
         return true;
     }
 
-    function _mint(address to, uint256 amount) internal {
-         require(to != address(0), "Erc20 mint to address 0");
+    function mint(uint256 amount) external {
+         require (owner == msg.sender, "only the owner can call this function");
 
          totalsupply += amount;
-         balanceOf[to] += amount;
+         balanceOf[msg.sender] += amount;
 
-         emit Transfer(address(0), to, amount);
+         emit Transfer(address(0), msg.sender, amount);
 
     }
 
